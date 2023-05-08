@@ -1,0 +1,117 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/include",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/src",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/AudioUSB/src",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/NDP_utils/src",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/Arduino_BQ24195/src",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/SerialFlash",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/NDP/src",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/syntiant_ilib",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/.pio/libdeps/mkr1000USB/SdFat/src",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/.pio/libdeps/mkr1000USB/HID-Project/src",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/HID",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/.pio/libdeps/mkr1000USB/Adafruit SSD1306",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/.pio/libdeps/mkr1000USB/Adafruit GFX Library",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/.pio/libdeps/mkr1000USB/Adafruit BusIO",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SPI",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/Wire",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/.pio/libdeps/mkr1000USB/avdweb_SAMDtimer",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/.pio/libdeps/mkr1000USB/Adafruit ZeroTimer Library",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/Adafruit_ASFcore",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/cores/arduino/api/deprecated",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/cores/arduino/api/deprecated-avr-comp",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib:/src/edgeimpulse",
+                "C:/Users/Workstation/.platformio/packages/framework-cmsis/CMSIS/Include",
+                "C:/Users/Workstation/.platformio/packages/framework-cmsis-atmel/CMSIS/Device/ATMEL",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/cores/arduino",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/variants/mkrzero",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/Arduino USBCore driver",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/I2S/src",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SAMD_AnalogCorrection/src",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SAMD_BootloaderUpdater/src",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SBU/src",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SDU/src",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SFU/src",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SNU/src",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SSU/src",
+                "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/USBHost/src",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/include",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/src",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/AudioUSB/src",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/NDP_utils/src",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/Arduino_BQ24195/src",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/SerialFlash",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/NDP/src",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/syntiant_ilib",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/.pio/libdeps/mkr1000USB/SdFat/src",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/.pio/libdeps/mkr1000USB/HID-Project/src",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/HID",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/.pio/libdeps/mkr1000USB/Adafruit SSD1306",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/.pio/libdeps/mkr1000USB/Adafruit GFX Library",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/.pio/libdeps/mkr1000USB/Adafruit BusIO",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SPI",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/Wire",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/.pio/libdeps/mkr1000USB/avdweb_SAMDtimer",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/.pio/libdeps/mkr1000USB/Adafruit ZeroTimer Library",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/Adafruit_ASFcore",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/cores/arduino/api/deprecated",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/cores/arduino/api/deprecated-avr-comp",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib:/src/edgeimpulse",
+                    "C:/Users/Workstation/.platformio/packages/framework-cmsis/CMSIS/Include",
+                    "C:/Users/Workstation/.platformio/packages/framework-cmsis-atmel/CMSIS/Device/ATMEL",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/cores/arduino",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/variants/mkrzero",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/Arduino USBCore driver",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/I2S/src",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SAMD_AnalogCorrection/src",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SAMD_BootloaderUpdater/src",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SBU/src",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SDU/src",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SFU/src",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SNU/src",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SSU/src",
+                    "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/USBHost/src",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=60106",
+                "ARDUINO_SAMD_MKRZERO",
+                "__SAMD21G18A__",
+                "USE_ARDUINO_MKR_PIN_LAYOUT",
+                "ARDUINO=10805",
+                "F_CPU=48000000L",
+                "USBCON",
+                "USB_VID=0x2341",
+                "USB_PID=0x804F",
+                "USB_PRODUCT=\"Arduino MKRZERO\"",
+                "USB_MANUFACTURER=\"Arduino\"",
+                "ARDUINO_ARCH_SAMD",
+                ""
+            ],
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "compilerPath": "C:/Users/Workstation/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-gcc.exe",
+            "compilerArgs": [
+                "-mcpu=cortex-m0plus",
+                "-mthumb",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}
