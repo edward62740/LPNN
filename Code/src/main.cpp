@@ -1,5 +1,7 @@
-/* Edge Impulse ingestion SDK
- * Copyright (c) 2021 EdgeImpulse Inc.
+/**
+ * MIT License
+ *
+ * Copyright (c) 2022 R. Dunbar Poor
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,45 +22,101 @@
  * SOFTWARE.
  */
 
-#include "edgeimpulse/syntiant.h"
 #include <NDP.h>
 #include <NDP_utils.h>
 #include <Arduino.h>
+#include "TinyML_init.h"
+#include "NDP_init.h"
+#include "NDP_loadModel.h"
+#include "SAMD21_init.h"
+#include "SAMD21_lowpower.h"
+
+typedef enum {
+  GLASS_BREAK = 1,
+  Z_OPENSET,
+} classifier_match_t;
+
+#define NDP_MICROPHONE 0
+#define NDP_SENSOR 1
+
+// Written at interrupt level (ndp_isr), read in service_ndp()
+static volatile classifier_match_t s_match;
 
 /**
- * @brief      Called when a inference matches 1 of the features
- *
- * @param[in]  event          The event
- * @param[in]  confidence     The confidence
- * @param[in]  anomaly_score  The anomaly score
+ * @brief Called at interrupt level when the NDP asserts an interrupt.
  */
-void on_classification_changed(const char *event, float confidence, float anomaly_score) {
+static void ndp_isr(void) { s_match = (classifier_match_t)NDP.poll(); }
 
-    // here you can write application code, e.g. to toggle LEDs based on keywords
-    if (strcmp(event, "stop") == 0) {
-        // Toggle LED
-        digitalWrite(LED_RED, HIGH);
-    }
+void service_ndp() {
+  switch (s_match) {
 
-    else if (strcmp(event, "go") == 0) {
-        // Toggle LED
-      //  digitalWrite(LED_GREEN, HIGH);
-    }
+  case GLASS_BREAK:
+    digitalWrite(LED_BLUE, HIGH);
+    delay(250);
+    digitalWrite(LED_BLUE, LOW);
+    break;
 
-    else
-    {
-      //  digitalWrite(LED_BLUE, HIGH);
-    }
+  case Z_OPENSET:
+    digitalWrite(LED_GREEN, HIGH);
+    delay(250);
+    digitalWrite(LED_GREEN, LOW);
+    break;
+
+  default:
+    break;
+  }
 }
 
+/**
+ * @brief One-time setup, called upon reboot.
+ */
+void setup(void) {
+  // Initialize the SAMD21 host processor
+  SAMD21_init(0);
 
-
-void setup(void)
-{
-    syntiant_setup();
+  
+  // load the the board with the model "google10.bin" it was shipped from the \
+  // factory
+  NDP_init("ei_model.bin", NDP_MICROPHONE);
+  // The NDP101 will wake the SAMD21 upon detection
+  attachInterrupt(NDP_INT, ndp_isr, HIGH);
+  // Prevent the internal flash memory from powering down in sleep mode
+  NVMCTRL->CTRLB.bit.SLEEPPRM = NVMCTRL_CTRLB_SLEEPPRM_DISABLED_Val;
+  // Select STANDBY for sleep mode
+  SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
 }
 
-void loop(void)
-{
-    syntiant_loop();
+/**
+ * @brief main loop.
+ *
+ * This loop immediately puts the processor into low-power standby mode, then
+ * waits for an interrupt from the NDP.  Upon receiving the interrupt, the
+ * processor wakes, services the NDP request and goes back to sleep.
+ *
+ * NOTE: To conserve power, the SAMD21 disables the USB port when it sleeps
+ * (which is most of the time).  When the USB port is disabled, any attempt to
+ * upload a sketch will fail.
+ *
+ * In order to upload a sketch, double-click the reset button.  This will put
+ * the SAMD21 into bootloader mode with the USB port enabled, allowing you to
+ * upload a sketch.
+ */
+void loop() {
+  // Put various peripheral modules into low power mode before entering standby.
+  adc_disable();        // See SAMD21_lowpower.h
+  usb_serial_disable(); // See note above about USB communications
+  systick_disable();
+  // Complete any memory operations and enter standby mode until an interrupt
+  // is recieved from the NDP101
+  __DSB();
+  __WFI();
+  
+  // Arrive here after waking and having called ndp_isr().  Re-enable various
+  // peripheral modules before servicing the NDP classifier data.
+  systick_enable();
+  usb_serial_enable();
+  adc_enable();
+  // process the classifier data from the NDP
+  service_ndp();
+  // loop (and return immediately to standby mode)
 }

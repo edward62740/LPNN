@@ -1,6 +1,3 @@
 {
-    "files.associations": {
-        "cstddef": "cpp"
-    },
     "cmake.configureOnOpen": false
 }
