@@ -35,11 +35,6 @@
 #include "NDP_init.h"
 #include "serialFlashUtils.h"
 
-#include <NDP.h>
-#include "NDP_loadModel.h"
-#include "NDP_init.h"
-#include "serialFlashUtils.h"
-
 void NDP_init(String model, byte tranceducer){ // Setting up NDP, transducer = 0 for Microphone and = 1 for sensor
   //String model = "google10.bin";                          // The factory loaded "google10.bin" has "Alexa play music" and "Alexa stop music"
   //String model = "ei_model.bin";                        // Use this line if using Edge Ipmulse model
@@ -76,6 +71,7 @@ void NDP_init(String model, byte tranceducer){ // Setting up NDP, transducer = 0
     Serial.println("Maybe a SD card present during boot process with no Model file. Please remove SD during boot process.");
     while (1);
   }
+  digitalWrite(FLASH_CS, HIGH);
   digitalWrite(LED_BLUE, LOW);                            // Turning off Red LED indicates clock is ok to NDP and it finished loading
   
   if (tranceducer == 0){

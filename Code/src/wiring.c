@@ -82,14 +82,14 @@ void init( void )
 
 // Defining VERY_LOW_POWER breaks Arduino APIs since all pins are considered INPUT at startup
 // However, it really lowers the power consumption by a factor of 20 in low power mode (0.03mA vs 0.6mA)
-#define VERY_LOW_POWER // [rdp]
-#ifndef VERY_LOW_POWER
+//#define VERY_LOW_POWER // [rdp]
+
   // Setup all pins (digital and analog) in INPUT mode (default is nothing)
   for (uint32_t ul = 0 ; ul < NUM_DIGITAL_PINS ; ul++ )
   {
-    pinMode( ul, INPUT ) ;
+    pinMode( ul, INPUT_PULLUP ) ;
   }
-#endif
+
 
   // Initialize Analog Controller
   // Setting clock

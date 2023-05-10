@@ -44,35 +44,22 @@ void SERCOM3_Handler()                                        // This is needed 
 
 void SAMD21_init(byte waitBeforeSerialPort){
   Serial.begin(115200);
-  Serial2.begin(115200);
-  pinPeripheral(6, PIO_SERCOM_ALT);                       //The 7th pin of TinyML board is setup for Serial2 debug. Please not 6 is Arduino pin mapping
+  //Serial2.begin(115200);
+  //pinPeripheral(6, PIO_SERCOM_ALT);                       //The 7th pin of TinyML board is setup for Serial2 debug. Please not 6 is Arduino pin mapping
   //pinPeripheral(7, PIO_SERCOM_ALT);                     // Since there is nothing expected from serial2 this pin is commented out
   pinMode(LED_RED, OUTPUT);                               //Red LED control of RGB LED
   pinMode(LED_BLUE, OUTPUT);                              //Green LED control of RGB LED
   pinMode(LED_GREEN, OUTPUT);                             //Blue LED control of RGB LED
   digitalWrite(LED_RED, HIGH);                            // A stuck RED LED indicates that program is waiting for Serial Port 
-  if ( waitBeforeSerialPort)
-      while (!Serial);                                      //Uncomment this line so that program waits for until Serial port is available for debugging
   digitalWrite(LED_RED, LOW);
-  Serial.println("");
-  Serial.println("                    Starting Syntiant TinyML");
+  //Serial.println("");
+  //Serial.println("                    Starting Syntiant TinyML");
   // ********** Setting SAMD21 pins for specific usage and avoiding floating nodes to save power *******
-  pinMode(USER_SWITCH, INPUT_PULLUP);                     //Setting User Switch to high voltage so when it shorted to ground it can be detected
+
   pinMode(PORSTB, OUTPUT);                                //Reset pin for NDP
   pinMode(TINYML_CS, OUTPUT);                             //Chip select for NDP's SPI interface
   pinMode(ENABLE_PDM, OUTPUT);                            //Pin which controls microphone usage or sensor usage
+  pinMode(NDP_INT, INPUT_PULLDOWN);                         //NDP interrupt pin
   digitalWrite(ENABLE_PDM, HIGH);                         // Disable PDM clock with external buffer to avoid contention is model is sensor related
-  pinMode(29, INPUT_PULLUP);                              //NDP MISO
-  pinMode(10, INPUT_PULLUP);                              //Serial Flash MISO
-  pinMode(30, INPUT_PULLUP);                              //SD SPI CS
-  pinMode(30, INPUT_PULLUP);                              //SD SPI CS
-  pinMode(15,OUTPUT);                                     //TinyML Expansion pin 5 is set as an output demonstrating GPIO responding to classifiers 
-  pinMode(7, INPUT_PULLUP);                               //TinyML Expansion pin 6
-  pinMode(1, INPUT_PULLUP);                               //TinyML Expansion pin 8
-  pinMode(0, INPUT_PULLUP);                               //TinyML Expansion pin 9
-  pinMode(4, INPUT_PULLUP);                               //unused GPIO 
-  pinMode(5, INPUT_PULLUP);                               //unused GPIO
-  pinMode(13, INPUT_PULLUP);                              //unused GPIO 
-  pinMode(14, INPUT_PULLUP);                              //unused GPIO  
   pinPeripheral(OSC32K_OUT_PIN, PIO_AC_CLK);              // Route OSC32K to PA11 pin for NDP clock
 }
