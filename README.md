@@ -18,6 +18,7 @@ The device consists of a NDP101 dedicated ML processor, SAMD21 microcontroller (
 Due to the lack of publicly available information regarding the NDP, direct integration onto a custom board was not reasonable within the timeframe of this project.<br>
 Hence, its [development board](https://www.syntiant.com/tinyml) was used, and mounted onto a custom board. However, the dev board does not perform well as a low-power system, particularly the 3v3/0v9 LDOs which have high I<sub>Q</sub> of 115μA and 20μA respectively. As such, modifications were made to the board (i.e the regulators are bypassed and 3v3 is supplied externally). The LEDs and IMU were also desoldered.<br>
 For some reason, the dev board does not have 3v3 routed to any of the pins (even though there are unused ones), and 0v9 lacks even a test pad.
+
 ## Performance
 
 Currently, the model runs (incl. microphone) at 695 μA RMS. The breakdown is detailed below.
