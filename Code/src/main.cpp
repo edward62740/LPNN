@@ -30,6 +30,7 @@
 #include "NDP_loadModel.h"
 #include "SAMD21_init.h"
 #include "SAMD21_lowpower.h"
+#include "LowPower.h"
 
 typedef enum {
   GLASS_BREAK = 1,
@@ -79,11 +80,14 @@ void setup(void) {
   // factory
   NDP_init("ei_model.bin", NDP_MICROPHONE);
   // The NDP101 will wake the SAMD21 upon detection
+
   attachInterrupt(NDP_INT, ndp_isr, HIGH);
+  
   // Prevent the internal flash memory from powering down in sleep mode
-  NVMCTRL->CTRLB.bit.SLEEPPRM = NVMCTRL_CTRLB_SLEEPPRM_DISABLED_Val;
+  //NVMCTRL->CTRLB.bit.SLEEPPRM = NVMCTRL_CTRLB_SLEEPPRM_DISABLED_Val;
   // Select STANDBY for sleep mode
   SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+  
 }
 
 /**
@@ -102,6 +106,7 @@ void setup(void) {
  * upload a sketch.
  */
 void loop() {
+
   // Put various peripheral modules into low power mode before entering standby.
   adc_disable();        // See SAMD21_lowpower.h
   usb_serial_disable(); // See note above about USB communications

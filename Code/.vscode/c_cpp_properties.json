@@ -26,6 +26,7 @@
                 "C:/Users/Workstation/.platformio/packages/framework-cmsis-atmel/CMSIS/Device/ATMEL",
                 "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/cores/arduino",
                 "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/variants/mkrzero",
+                "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/Low-Power-master",
                 "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/HID",
                 "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/I2S/src",
                 "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SAMD_AnalogCorrection/src",
@@ -59,6 +60,7 @@
                     "C:/Users/Workstation/.platformio/packages/framework-cmsis-atmel/CMSIS/Device/ATMEL",
                     "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/cores/arduino",
                     "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/variants/mkrzero",
+                    "C:/Users/Workstation/Documents/GitHub/LPNN/Code/lib/Low-Power-master",
                     "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/HID",
                     "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/I2S/src",
                     "C:/Users/Workstation/.platformio/packages/framework-arduino-samd/libraries/SAMD_AnalogCorrection/src",
@@ -73,7 +75,7 @@
                 ]
             },
             "defines": [
-                "PLATFORMIO=60106",
+                "PLATFORMIO=60107",
                 "ARDUINO_SAMD_MKRZERO",
                 "__SAMD21G18A__",
                 "USE_ARDUINO_MKR_PIN_LAYOUT",

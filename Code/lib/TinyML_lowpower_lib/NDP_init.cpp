@@ -80,4 +80,6 @@ void NDP_init(String model, byte tranceducer){ // Setting up NDP, transducer = 0
     indirectWrite(0x40011004,0x000000F0);                   // Above signals are set to logic high (easy to monitor)   
     }                     
   NDP.poll(); // clear any pending interrupts
+
+  
 }

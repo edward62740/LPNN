@@ -47,11 +47,7 @@ void SAMD21_init(byte waitBeforeSerialPort){
   //Serial2.begin(115200);
   //pinPeripheral(6, PIO_SERCOM_ALT);                       //The 7th pin of TinyML board is setup for Serial2 debug. Please not 6 is Arduino pin mapping
   //pinPeripheral(7, PIO_SERCOM_ALT);                     // Since there is nothing expected from serial2 this pin is commented out
-  pinMode(LED_RED, OUTPUT);                               //Red LED control of RGB LED
-  pinMode(LED_BLUE, OUTPUT);                              //Green LED control of RGB LED
-  pinMode(LED_GREEN, OUTPUT);                             //Blue LED control of RGB LED
-  digitalWrite(LED_RED, HIGH);                            // A stuck RED LED indicates that program is waiting for Serial Port 
-  digitalWrite(LED_RED, LOW);
+ 
   //Serial.println("");
   //Serial.println("                    Starting Syntiant TinyML");
   // ********** Setting SAMD21 pins for specific usage and avoiding floating nodes to save power *******
@@ -59,7 +55,7 @@ void SAMD21_init(byte waitBeforeSerialPort){
   pinMode(PORSTB, OUTPUT);                                //Reset pin for NDP
   pinMode(TINYML_CS, OUTPUT);                             //Chip select for NDP's SPI interface
   pinMode(ENABLE_PDM, OUTPUT);                            //Pin which controls microphone usage or sensor usage
-  pinMode(NDP_INT, INPUT_PULLDOWN);                         //NDP interrupt pin
+  pinMode(NDP_INT, INPUT);                         //NDP interrupt pin
   digitalWrite(ENABLE_PDM, HIGH);                         // Disable PDM clock with external buffer to avoid contention is model is sensor related
   pinPeripheral(OSC32K_OUT_PIN, PIO_AC_CLK);              // Route OSC32K to PA11 pin for NDP clock
 }
