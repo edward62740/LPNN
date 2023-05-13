@@ -1,27 +1,3 @@
-/**
- * MIT License
- *
- * Copyright (c) 2022 R. Dunbar Poor
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 #include <NDP.h>
 #include <NDP_utils.h>
 #include <Arduino.h>
@@ -37,16 +13,17 @@ typedef enum {
   Z_OPENSET,
 } classifier_match_t;
 
-#define NDP_MICROPHONE 0
-#define NDP_SENSOR 1
 
-// Written at interrupt level (ndp_isr), read in service_ndp()
+
 static volatile classifier_match_t s_match;
-
-/**
- * @brief Called at interrupt level when the NDP asserts an interrupt.
- */
 static void ndp_isr(void) { s_match = (classifier_match_t)NDP.poll(); }
+
+Uart ext(&sercom3, 7, 6, SERCOM_RX_PAD_3, UART_TX_PAD_2); // UART for communication with host mcu
+
+void SERCOM3_Handler()
+{
+    ext.IrqHandler();
+}
 
 void service_ndp() {
   switch (s_match) {
@@ -68,18 +45,16 @@ void service_ndp() {
   }
 }
 
-/**
- * @brief One-time setup, called upon reboot.
- */
+
 void setup(void) {
   // Initialize the SAMD21 host processor
   SAMD21_init(0);
 
-  
-  // load the the board with the model "google10.bin" it was shipped from the \
-  // factory
-  NDP_init("ei_model.bin", NDP_MICROPHONE);
-  // The NDP101 will wake the SAMD21 upon detection
+  ext.begin(115200);
+  //pinPeripheral(6, PIO_SERCOM_ALT);                       //The 7th pin of TinyML board is setup for Serial2 debug. Please not 6 is Arduino pin mapping
+  //pinPeripheral(7, PIO_SERCOM_ALT);                     // Since there is nothing expected from serial2 this pin is commented out
+
+  NDP_init("ei_model.bin", 0);
 
   attachInterrupt(NDP_INT, ndp_isr, HIGH);
   
@@ -90,21 +65,6 @@ void setup(void) {
    usb_serial_disable(); // See note above about USB communications
 }
 
-/**
- * @brief main loop.
- *
- * This loop immediately puts the processor into low-power standby mode, then
- * waits for an interrupt from the NDP.  Upon receiving the interrupt, the
- * processor wakes, services the NDP request and goes back to sleep.
- *
- * NOTE: To conserve power, the SAMD21 disables the USB port when it sleeps
- * (which is most of the time).  When the USB port is disabled, any attempt to
- * upload a sketch will fail.
- *
- * In order to upload a sketch, double-click the reset button.  This will put
- * the SAMD21 into bootloader mode with the USB port enabled, allowing you to
- * upload a sketch.
- */
 void loop() {
 
   // Put various peripheral modules into low power mode before entering standby.

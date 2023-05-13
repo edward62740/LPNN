@@ -1,4 +1,4 @@
-# LPNN
+# LPNN [in progress]
 This system runs an always-on neural network for audio classification. Specifically, this project involves the detection of glass breaking and forced entry sounds to provide security at points of ingress. It runs at sub-mW power during inference, allowing for fully battery powered operation and thereby increased deployment flexibility.
 
 ## Overview
@@ -33,14 +33,15 @@ Currently, the model runs (incl. microphone) at 695 μA RMS. The breakdown is de
 | Device               | Current Draw  (Typ) | Current Draw  (Worst) | Rail |
 |----------------------|---------------------|-----------------------|------|
 | NDP101               | 140μA               |                       |      |
-| Microphone           | 620μA               | 700μA                 | 2v5  |
+| Microphone           |                     |                       | 2v5  |
 | SAMD21               |                     |                       |      |
 | 3v3 regulator (ext.) | 500nA               | 1000nA                | Vbat |
 | 0v9 regulator        | 20μA                | 26μA                  | 2v5  |
-|                      |                     |                       |      |
-|                      |                     |                       |      |
+| SPI NOR              |                     |                       |      |
+| Host MCU (ext.)      |                     |                       |      |
 
-It is possible to further improve this figure by decreasing the PDM clk, or by complete redesign of the board to allow for disconnecting the NOR flash etc from supply. However, the current performance is sufficient for the intended application, which yields  years of battery life on 2xAA batteries.
+It is possible to further improve this figure by decreasing the PDM clk, or by complete redesign of the board to allow for disconnecting the NOR flash etc from supply. 
+Alternatively, a different microphone can be used, such as the MMICT5838 which consumes only 120μA at 768kHz. However, the current performance is sufficient for the intended application, which yields  years of battery life on 2xAA batteries.
 
 
 The performance of the model used:
