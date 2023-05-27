@@ -35,18 +35,10 @@
 #include "NDP_loadModel.h"
 #include "SAMD21_init.h"
 
-Uart Serial2(&sercom3, 7, 6, SERCOM_RX_PAD_3, UART_TX_PAD_2); // This sets TinyML boards Expansion board pins 6,7 for debug
-
-void SERCOM3_Handler()                                        // This is needed for Serial2
-{
-    Serial2.IrqHandler();
-}
 
 void SAMD21_init(byte waitBeforeSerialPort){
  // Serial.begin(115200);
-  //Serial2.begin(115200);
-  //pinPeripheral(6, PIO_SERCOM_ALT);                       //The 7th pin of TinyML board is setup for Serial2 debug. Please not 6 is Arduino pin mapping
-  //pinPeripheral(7, PIO_SERCOM_ALT);                     // Since there is nothing expected from serial2 this pin is commented out
+  
  
   //Serial.println("");
   //Serial.println("                    Starting Syntiant TinyML");

@@ -24,12 +24,16 @@ The neural network architecture is detailed below:
 | Dropout |           | 0.2       |            |
 | Dense   | 2,1       |           | softmax    |
 <br>
-## Software (Connectivity)
 
+![Spectrogram](https://github.com/edward62740/LPNN/blob/master/doc/spec.png)
+<br>*Spectrogram*
+
+## Software (Connectivity)
+--
 
 ## Performance
 
-Currently, the model runs (incl. microphone) at 695 μA RMS. The breakdown is detailed below.
+Currently, the model runs (incl. microphone) at 690 μA. The breakdown is detailed below.
 | Device               | Current Draw  (Typ) | Current Draw  (Worst) | Rail |
 |----------------------|---------------------|-----------------------|------|
 | NDP101               | 140μA               |                       |      |
@@ -38,10 +42,10 @@ Currently, the model runs (incl. microphone) at 695 μA RMS. The breakdown is de
 | 3v3 regulator (ext.) | 500nA               | 1000nA                | Vbat |
 | 0v9 regulator        | 20μA                | 26μA                  | 2v5  |
 | SPI NOR              |                     |                       |      |
-| Host MCU (ext.)      |                     |                       |      |
+| Host MCU (ext.)      | <10μA               |                       | 2v5  |
 
 It is possible to further improve this figure by decreasing the PDM clk, or by complete redesign of the board to allow for disconnecting the NOR flash etc from supply. 
-Alternatively, a different microphone can be used, such as the MMICT5838 which consumes only 120μA at 768kHz. However, the current performance is sufficient for the intended application, which yields  years of battery life on 2xAA batteries.
+Alternatively, a different microphone can be used, such as the MMICT5838 which consumes only 120μA at 768kHz. However, the power consumption is sufficient for the intended application, which yields about a year of battery life on 2xAA batteries.
 
 
 The performance of the model used:
@@ -50,4 +54,6 @@ The performance of the model used:
 | **Glass_break** | 0.89            | 0.09           | 0.02          |
 | **Background**  | 0.002           | 0.997          | 0.002         |
 | **F1**          | 0.93            | 1.00           |               |
+
+In practice, the model yields a higher FAR than ideal for a security application. However, this project is a sufficient proof-of-concept for the workability of this concept. Hence, a future improvement will be to use the NDP120 (newer IC), which also provides 2d conv layers.
 

@@ -1,3 +1,4 @@
+#include "main.h"
 #include <NDP.h>
 #include <NDP_utils.h>
 #include <Arduino.h>
@@ -7,18 +8,14 @@
 #include "SAMD21_init.h"
 #include "SAMD21_lowpower.h"
 #include "LowPower.h"
+#include "hostcmd.h"
 
-typedef enum {
-  GLASS_BREAK = 1,
-  Z_OPENSET,
-} classifier_match_t;
-
-
+Uart ext(&sercom3, 7, 6, SERCOM_RX_PAD_3, UART_TX_PAD_2); // UART for communication with host mcu
 
 static volatile classifier_match_t s_match;
 static void ndp_isr(void) { s_match = (classifier_match_t)NDP.poll(); }
 
-Uart ext(&sercom3, 7, 6, SERCOM_RX_PAD_3, UART_TX_PAD_2); // UART for communication with host mcu
+
 
 void SERCOM3_Handler()
 {
@@ -26,6 +23,9 @@ void SERCOM3_Handler()
 }
 
 void service_ndp() {
+
+  hostcmd_send_classifier_match(s_match);
+  
   switch (s_match) {
 
   case GLASS_BREAK:
@@ -59,7 +59,7 @@ void setup(void) {
   attachInterrupt(NDP_INT, ndp_isr, HIGH);
   
   // Prevent the internal flash memory from powering down in sleep mode
-  //NVMCTRL->CTRLB.bit.SLEEPPRM = NVMCTRL_CTRLB_SLEEPPRM_DISABLED_Val;
+  NVMCTRL->CTRLB.bit.SLEEPPRM = NVMCTRL_CTRLB_SLEEPPRM_DISABLED_Val;
   // Select STANDBY for sleep mode
   SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
    usb_serial_disable(); // See note above about USB communications

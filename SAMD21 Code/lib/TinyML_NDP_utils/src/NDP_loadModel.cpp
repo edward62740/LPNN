@@ -133,7 +133,7 @@ int loadModel(String model)
             return ERROR_LOADING_SD;
         }
     }
-    Serial2.println();
+
     if (s == SYNTIANT_NDP_ERROR_NONE)
     {
         myFile.close();
@@ -144,17 +144,17 @@ int loadModel(String model)
 // Clears the onboard SST25VF016B device, & copies the SD flash files to it
 void copySdToFlash()
 {
-    Serial2.println("Copy all files from SD Card to SPI Flash");
+
 
     if (!SD.begin(SD_CS))
     {
-        Serial2.println("Unable to access SD card");
+        Serial.println("Unable to access SD card");
     }
     if (!SerialFlash.begin(FLASH_CS))
     {
-        Serial2.println("Unable to access SPI Flash chip");
+        Serial.println("Unable to access SPI Flash chip");
     }
-    Serial2.println("SD card initialized OK");
+    Serial.println("SD card initialized OK");
 
     // enable writes to flash
     digitalWrite(FLASH_CS, LOW);
@@ -177,20 +177,20 @@ void copySdToFlash()
     SPI1.transfer(0x05);
     byte status = SPI1.transfer(0);
     digitalWrite(FLASH_CS, HIGH);
-    Serial2.print("Status Register before erase = 0x");
-    Serial2.println(status, HEX);
+    Serial.print("Status Register before erase = 0x");
+    Serial.println(status, HEX);
 
     // erase Serial flash
-    Serial2.println("Erasing Chip");
+    Serial.println("Erasing Chip");
     digitalWrite(LED_BUILTIN, HIGH);
     SerialFlash.eraseAll();
     SerialFlash.wait();
-    Serial2.println("Done erasing");
+    Serial.println("Done erasing");
 
     File rootdir = SD.open("/");
 
     // Copy all files from SD card to Serial Flash
-    Serial2.println("Copying Files From SD Card");
+    Serial.println("Copying Files From SD Card");
 
     while (1)
     {
@@ -203,39 +203,39 @@ void copySdToFlash()
         byte len = sizeof(filename);
         f.getName(filename, len);
 
-        Serial2.print(filename);
-        Serial2.print("    ");
+        Serial.print(filename);
+        Serial.print("    ");
         unsigned long length = f.size();
-        Serial2.println(length);
+        Serial.println(length);
 
         // check if this file is already on the Flash chip
         if (SerialFlash.exists(filename))
         {
-            Serial2.println("  already exists on the Flash chip");
+            Serial.println("  already exists on the Flash chip");
             SerialFlashFile ff = SerialFlash.open(filename);
             if (ff && ff.size() == f.size())
             {
-                Serial2.println("  size is the same, comparing data...");
+                Serial.println("  size is the same, comparing data...");
                 if (compareFiles(f, ff) == true)
                 {
-                    Serial2.println("  files are identical :)");
+                    Serial.println("  files are identical :)");
                     f.close();
                     ff.close();
                     continue; // advance to next file
                 }
                 else
                 {
-                    Serial2.println("  files are different");
+                    Serial.println("  files are different");
                 }
             }
             else
             {
-                Serial2.print("  size is different, ");
-                Serial2.print(ff.size());
-                Serial2.println(" bytes");
+                Serial.print("  size is different, ");
+                Serial.print(ff.size());
+                Serial.println(" bytes");
             }
             // delete the copy on the Flash chip, if different
-            Serial2.println("  delete file from Flash chip");
+            Serial.println("  delete file from Flash chip");
             SerialFlash.remove(filename);
         }
 
@@ -245,7 +245,7 @@ void copySdToFlash()
             SerialFlashFile ff = SerialFlash.open(filename);
             if (ff)
             {
-                Serial2.print("  copying");
+                Serial.print("  copying");
                 // copy data loop
                 unsigned long count = 0;
                 unsigned char dotcount = 9;
@@ -259,42 +259,42 @@ void copySdToFlash()
                     n = f.read(buf, 256);
                     ff.write(buf, n);
                     count = count + n;
-                    Serial2.print(".");
+                    Serial.print(".");
                     if (++dotcount > 100)
                     {
-                        Serial2.println();
+                        Serial.println();
                         dotcount = 0;
                     }
                 }
                 uint32_t filesize = ff.size();
                 unsigned long usend = micros();
-                Serial2.println();
-                Serial2.print("Written in ");
-                Serial2.print(usend - usbegin);
-                Serial2.print(" us, speed = ");
-                Serial2.print((float)filesize * 1000.0 / (float)(usend - usbegin));
-                Serial2.println(" kbytes/sec");
+                Serial.println();
+                Serial.print("Written in ");
+                Serial.print(usend - usbegin);
+                Serial.print(" us, speed = ");
+                Serial.print((float)filesize * 1000.0 / (float)(usend - usbegin));
+                Serial.println(" kbytes/sec");
 
                 ff.close();
                 if (dotcount > 0)
-                    Serial2.println();
+                    Serial.println();
             }
             else
             {
-                Serial2.println("  error opening freshly created file!");
+                Serial.println("  error opening freshly created file!");
             }
         }
         else
         {
-            Serial2.println("  unable to create file");
+            Serial.println("  unable to create file");
         }
         f.close();
     }
     rootdir.close();
     delay(10);
-    Serial2.println("Finished Writing All Files");
-    Serial2.println("");
-    Serial2.println("Catalog of Serial Flash");
+    Serial.println("Finished Writing All Files");
+    Serial.println("");
+    Serial.println("Catalog of Serial Flash");
     SerialFlash.opendir();
     while (1)
     {
@@ -305,15 +305,15 @@ void copySdToFlash()
 
         if (SerialFlash.readdir(filename, sizeof(filename), filesize))
         {
-            Serial2.print("  ");
-            Serial2.print(filename);
-            Serial2.print("  ");
-            Serial2.print(filesize);
-            Serial2.print(" bytes");
-            Serial2.println();
+            Serial.print("  ");
+            Serial.print(filename);
+            Serial.print("  ");
+            Serial.print(filesize);
+            Serial.print(" bytes");
+            Serial.println();
             if (!strcmp(FoundFile.c_str(), (char *)filename))
             {
-                Serial2.println("Found BIN file!!");
+                Serial.println("Found BIN file!!");
             }
         }
         else
@@ -323,8 +323,8 @@ void copySdToFlash()
     }
 
     // Read Performance Test
-    Serial2.println("");
-    Serial2.println("Read Performance Test....");
+    Serial.println("");
+    Serial.println("Read Performance Test....");
     SerialFlash.opendir();
     int filecount = 0;
     while (1)
@@ -334,11 +334,11 @@ void copySdToFlash()
 
         if (SerialFlash.readdir(filename, sizeof(filename), filesize))
         {
-            Serial2.print("  ");
-            Serial2.print(filename);
-            Serial2.print(", ");
-            Serial2.print(filesize);
-            Serial2.print(" bytes");
+            Serial.print("  ");
+            Serial.print(filename);
+            Serial.print(", ");
+            Serial.print(filesize);
+            Serial.print(" bytes");
             SerialFlashFile file = SerialFlash.open(filename);
             if (file)
             {
@@ -354,16 +354,16 @@ void copySdToFlash()
                     n = n - rd;
                 }
                 unsigned long usend = micros();
-                Serial2.print(", read in ");
-                Serial2.print(usend - usbegin);
-                Serial2.print(" us, speed = ");
-                Serial2.print((float)filesize * 1000.0 / (float)(usend - usbegin));
-                Serial2.println(" kbytes/sec");
+                Serial.print(", read in ");
+                Serial.print(usend - usbegin);
+                Serial.print(" us, speed = ");
+                Serial.print((float)filesize * 1000.0 / (float)(usend - usbegin));
+                Serial.println(" kbytes/sec");
                 file.close();
             }
             else
             {
-                Serial2.println(" error reading this file!");
+                Serial.println(" error reading this file!");
             }
             filecount = filecount + 1;
         }
@@ -371,7 +371,7 @@ void copySdToFlash()
         {
             if (filecount == 0)
             {
-                Serial2.println("No files found in SerialFlash memory.");
+                Serial.println("No files found in SerialFlash memory.");
             }
             digitalWrite(LED_BUILTIN, LOW);
             break; // no more files
@@ -401,41 +401,41 @@ bool compareFiles(File &file, SerialFlashFile &ffile)
 
 void fatFormatSd()
 {
-    Serial2.println("Formatting SD card");
+    Serial.println("Formatting SD card");
 
     // Select and initialize proper card driver.
     mCard = cardFactory.newCard(SD_CONFIG);
     if (!mCard || mCard->errorCode())
     {
-        Serial2.println("Card init failed.");
+        Serial.println("Card init failed.");
         return;
     }
 
     cardSectorCount = mCard->sectorCount();
     if (!cardSectorCount)
     {
-        Serial2.println("Get sector count failed.");
+        Serial.println("Get sector count failed.");
         return;
     }
 
-    Serial2.print("Card size: ");
-    Serial2.print(cardSectorCount * 5.12e-7);
-    Serial2.println(" GB (GB = 1E9 bytes)");
-    Serial2.print("Card size: ");
-    Serial2.print(cardSectorCount / 2097152.0);
-    Serial2.println(" GiB (GiB = 2^30 bytes)");
-    Serial2.print("Card will be formatted with ");
+    Serial.print("Card size: ");
+    Serial.print(cardSectorCount * 5.12e-7);
+    Serial.println(" GB (GB = 1E9 bytes)");
+    Serial.print("Card size: ");
+    Serial.print(cardSectorCount / 2097152.0);
+    Serial.println(" GiB (GiB = 2^30 bytes)");
+    Serial.print("Card will be formatted with ");
     if (cardSectorCount > 67108864)
     {
-        Serial2.println("exFAT");
+        Serial.println("exFAT");
     }
     else if (cardSectorCount > 4194304)
     {
-        Serial2.println("FAT32");
+        Serial.println("FAT32");
     }
     else
     {
-        Serial2.println("FAT16");
+        Serial.println("FAT16");
     }
     formatCard();
 }
@@ -446,46 +446,46 @@ void formatCard()
     FatFormatter fatFormatter;
 
     // Format exFAT if larger than 32GB.
-    bool rtn = cardSectorCount > 67108864 ? exFatFormatter.format(mCard, sectorBuffer, &Serial2) : fatFormatter.format(mCard, sectorBuffer, &Serial2);
+    bool rtn = cardSectorCount > 67108864 ? exFatFormatter.format(mCard, sectorBuffer, &Serial) : fatFormatter.format(mCard, sectorBuffer, &Serial);
 
     if (!rtn)
     {
-        Serial2.println("Formatting Error");
+        Serial.println("Formatting Error");
     }
 }
 
 void eraseSd()
 {
-    Serial2.println("Erasing SD card");
+    Serial.println("Erasing SD card");
 
     // Select and initialize proper card driver.
     mCard = cardFactory.newCard(SD_CONFIG);
     if (!mCard || mCard->errorCode())
     {
-        Serial2.println("Card init failed.");
+        Serial.println("Card init failed.");
         return;
     }
 
     cardSectorCount = mCard->sectorCount();
     if (!cardSectorCount)
     {
-        Serial2.println("Get sector count failed.");
+        Serial.println("Get sector count failed.");
         return;
     }
 
-    Serial2.print("Card size: ");
-    Serial2.print(cardSectorCount * 5.12e-7);
-    Serial2.println(" GB (GB = 1E9 bytes)");
-    Serial2.print("Card size: ");
-    Serial2.print(cardSectorCount / 2097152.0);
-    Serial2.println(" GiB (GiB = 2^30 bytes)");
+    Serial.print("Card size: ");
+    Serial.print(cardSectorCount * 5.12e-7);
+    Serial.println(" GB (GB = 1E9 bytes)");
+    Serial.print("Card size: ");
+    Serial.print(cardSectorCount / 2097152.0);
+    Serial.println(" GiB (GiB = 2^30 bytes)");
     eraseCard();
-    Serial2.println("Done!");
+    Serial.println("Done!");
 }
 
 void eraseCard()
 {
-    Serial2.println("Erasing!");
+    Serial.println("Erasing!");
     uint32_t firstBlock = 0;
     uint32_t lastBlock;
     uint16_t n = 0;
@@ -498,24 +498,24 @@ void eraseCard()
         }
         if (!mCard->erase(firstBlock, lastBlock))
         {
-            Serial2.println("Erase failed");
+            Serial.println("Erase failed");
         }
-        Serial2.print(".");
+        Serial.print(".");
         if ((n++) % 64 == 63)
         {
-            Serial2.println("");
+            Serial.println("");
         }
         firstBlock += ERASE_SIZE;
     } while (firstBlock < cardSectorCount);
 
-    Serial2.println("");
+    Serial.println("");
 
     if (!mCard->readSector(0, sectorBuffer))
     {
-        Serial2.println("Error - readBlock");
+        Serial.println("Error - readBlock");
     }
 
-    Serial2.println("Erase done");
+    Serial.println("Erase done");
 }
 
 // read filenames in Serial Flash looking for file
@@ -571,7 +571,7 @@ void loadUilibFlash(byte record)
     changeMasterSpiMode(MSPI_UPDATE);
     changeMasterSpiMode(MSPI_TRANSFER);
     unsigned long fileLength = indirectRead(CHIP_CONFIG_SPIRX);
-    Serial2.println(fileLength, HEX);
+    Serial.println(fileLength, HEX);
     changeMasterSpiMode(MSPI_UPDATE);
     changeMasterSpiMode(MSPI_TRANSFER);
     unsigned long magicNumber = indirectRead(CHIP_CONFIG_SPIRX);
@@ -585,8 +585,8 @@ void loadUilibFlash(byte record)
         magicNumber = MAGIC_NUMBER;
         fileLength = fileLength >> 8;
     }
-    Serial2.println(magicNumber, HEX);
-    Serial2.println(MAGIC_NUMBER, HEX);
+    Serial.println(magicNumber, HEX);
+    Serial.println(MAGIC_NUMBER, HEX);
     // Check if magic number is correct
     if (magicNumber == MAGIC_NUMBER)
     {
