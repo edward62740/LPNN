@@ -1,8 +1,10 @@
-# LPNN [in progress]
+# LPNN
 This system runs an always-on neural network for audio classification. Specifically, this project involves the detection of glass breaking and forced entry sounds to provide security at points of ingress. It runs at sub-mW power during inference, allowing for fully battery powered operation and thereby increased deployment flexibility.
 
 ## Overview
 The device consists of a NDP101 dedicated AI accelerator, SAMD21 microcontroller (on dev board), and an external host MCU for Internet connectivity.
+
+Note: This project is unfinished
 
 ## Design
 ### Hardware
@@ -25,7 +27,7 @@ The neural network architecture is detailed below:
 | Dense   | 2,1       |           | softmax    |
 <br>
 
-![Spectrogram](https://github.com/edward62740/LPNN/blob/master/doc/spec.png)
+![Spectrogram](https://github.com/edward62740/LPNN/blob/master/Doc/spec.png)
 <br>*Spectrogram*
 
 ## Software (Connectivity)
