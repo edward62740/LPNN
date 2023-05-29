@@ -11,11 +11,11 @@ Note: This project is unfinished
 Due to the lack of publicly available information regarding the NDP, direct integration onto a custom board was not feasible.<br>
 Hence, its [development board](https://www.syntiant.com/tinyml) was used, and mounted onto a custom board. However, the dev board does not perform well as a low-power system, particularly the 3v3/0v9 LDOs which have high I<sub>Q</sub> of 115μA and 20μA respectively. As such, modifications were made to the board (i.e the regulators are bypassed and 3v3 is supplied externally). The LEDs and IMU were also desoldered.<br>
 For some reason, the dev board does not have 3v3 routed to any of the pins (even though there are unused ones), and 0v9 lacks even a test pad.<br>
-![PCB](https://github.com/edward62740/LPNN/blob/master/Doc/pcb.jpeg)
+<img src="https://github.com/edward62740/LPNN/blob/master/Doc/pcb.jpeg" alt="PCB" width="35%" />
 
 ### Software (AI)
 The audio signals are transformed into mel spectrograms, most of the feature extraction and DSP is done within the NDP101. Due to hardware limitations, only dense layers can be used, instead of convolutional layers which may be more suited to this case. The NDP101 is configured to interrupt the SAMD21 when a match is found and will communicate the details over SPI.<br>
-The SAMD21 then passes the results over LPUART to the STM32WB SiP.
+The SAMD21 then passes the results over LPUART to the STM32WB SiP. Credits to [VOICe Dataset](https://dcase.community/challenge2017/task-rare-sound-event-detection-results) and [this project](https://docs.edgeimpulse.com/experts/prototype-and-concept-projects/vandalism-detection-audio-classification) for the audio datasets used.
 The neural network architecture is detailed below:
 | Layer   | Dimension | Value     | Activation |
 |---------|-----------|-----------|------------|
