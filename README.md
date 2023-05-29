@@ -8,12 +8,14 @@ Note: This project is unfinished
 
 ## Design
 ### Hardware
-Due to the lack of publicly available information regarding the NDP, direct integration onto a custom board was not reasonable within the timeframe of this project.<br>
+Due to the lack of publicly available information regarding the NDP, direct integration onto a custom board was not feasible.<br>
 Hence, its [development board](https://www.syntiant.com/tinyml) was used, and mounted onto a custom board. However, the dev board does not perform well as a low-power system, particularly the 3v3/0v9 LDOs which have high I<sub>Q</sub> of 115μA and 20μA respectively. As such, modifications were made to the board (i.e the regulators are bypassed and 3v3 is supplied externally). The LEDs and IMU were also desoldered.<br>
-For some reason, the dev board does not have 3v3 routed to any of the pins (even though there are unused ones), and 0v9 lacks even a test pad.
+For some reason, the dev board does not have 3v3 routed to any of the pins (even though there are unused ones), and 0v9 lacks even a test pad.<br>
+![PCB](https://github.com/edward62740/LPNN/blob/master/Doc/pcb.jpeg)
 
 ### Software (AI)
-The audio signals are transformed into mel spectrograms, most of the feature extraction and DSP is done within the NDP101. Due to hardware limitations, only dense layers can be used, instead of convolutional layers which may be more suited to this case. The NDP101 is configured to interrupt the SAMD21 when a match is found and will communicate the details over SPI.
+The audio signals are transformed into mel spectrograms, most of the feature extraction and DSP is done within the NDP101. Due to hardware limitations, only dense layers can be used, instead of convolutional layers which may be more suited to this case. The NDP101 is configured to interrupt the SAMD21 when a match is found and will communicate the details over SPI.<br>
+The SAMD21 then passes the results over LPUART to the STM32WB SiP.
 The neural network architecture is detailed below:
 | Layer   | Dimension | Value     | Activation |
 |---------|-----------|-----------|------------|
@@ -31,19 +33,19 @@ The neural network architecture is detailed below:
 <br>*Spectrogram*
 
 ## Software (Connectivity)
---
+The device communicates over a IPv6 Thread network and sends positive inference results to the cloud via this [bridge](https://github.com/edward62740/firebase-ingestor-rs).
 
 ## Performance
 
-Currently, the model runs (incl. microphone) at 690 μA. The breakdown is detailed below.
-| Device               | Current Draw  (Typ) | Current Draw  (Worst) | Rail |
+Currently, the model runs (incl. microphone) at 690 μA on 2v5 rail. The breakdown is below.
+| Device               | Current Draw  (Avg) | Current Draw  (Worst) | Rail |
 |----------------------|---------------------|-----------------------|------|
-| NDP101               | 140μA               |                       |      |
-| Microphone           |                     |                       | 2v5  |
-| SAMD21               |                     |                       |      |
+| NDP101               | 140μA               |                       |2v5/0v9|
+| Microphone           |  ?                  |                       | 2v5  |
+| SAMD21               | <10μA               |                       |      |
 | 3v3 regulator (ext.) | 500nA               | 1000nA                | Vbat |
 | 0v9 regulator        | 20μA                | 26μA                  | 2v5  |
-| SPI NOR              |                     |                       |      |
+| ~SPI NOR~              |                     |                       |      |
 | Host MCU (ext.)      | <10μA               |                       | 2v5  |
 
 It is possible to further improve this figure by decreasing the PDM clk, or by complete redesign of the board to allow for disconnecting the NOR flash etc from supply. 
@@ -57,5 +59,5 @@ The performance of the model used:
 | **Background**  | 0.002           | 0.997          | 0.002         |
 | **F1**          | 0.93            | 1.00           |               |
 
-In practice, the model yields a higher FAR than ideal for a security application. However, this project is a sufficient proof-of-concept for the workability of this concept. Hence, a future improvement will be to use the NDP120 (newer IC), which also provides 2d conv layers.
+In practice, the model yields a higher FAR than ideal for a security application, where even very occasional false positives can prove to be disruptive to operations. For instance, the window duration is 968ms, so even a FPR of 1.65e-6 is one disruption a week. Additional window delay/suppression algorithms may need to be considered. However, this project is a sufficient proof-of-concept for intended further development. A future improvement will be to use the NDP120 (newer IC), which also provides 2d conv layers.
 
