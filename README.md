@@ -4,7 +4,6 @@ This system runs an always-on neural network for audio classification. Specifica
 ## Overview
 The device consists of a NDP101 dedicated AI accelerator, SAMD21 microcontroller (on dev board), and an external host MCU for Internet connectivity.
 
-Note: This project is unfinished
 
 ## Design
 ### Hardware
